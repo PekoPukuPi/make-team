@@ -43,7 +43,7 @@ async def group(ctx, specified_num=1):
     
 @bot.command()
 async def usagi(ctx):
-    await ctx.send('テスト')
+    await ctx.send('【/team チーム数】')
 
 """botの接続と起動"""
 bot.run(token)

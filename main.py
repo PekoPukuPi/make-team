@@ -43,7 +43,27 @@ async def group(ctx, specified_num=1):
     
 @bot.command()
 async def ping(ctx):
-    await ctx.send('pong')
+    await ctx.send('【/team チーム数】
+
+例：/team 3
+→ 3チーム作成
+
+・指定した数のチームを作成
+
+・メンバー数が同じになるように作成
+
+・チーム数を指定しなくても実行可。デフォルトで"2"を指定
+
+
+
+【/group メンバー数】
+
+例：/group 3
+→ 1チーム3人になるようにチーム作成
+
+・指定したメンバー数でチームを作成
+
+・メンバー数を指定しない場合、デフォルトとして"1"を指定')
 
 """botの接続と起動"""
 bot.run(token)

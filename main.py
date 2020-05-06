@@ -42,7 +42,7 @@ async def group(ctx, specified_num=1):
     await ctx.channel.send(msg)
     
 @bot.command()
-async def (ctx):
+async def usagi(ctx):
     await ctx.send('テスト')
 
 """botの接続と起動"""

@@ -42,8 +42,8 @@ async def group(ctx, specified_num=1):
     await ctx.channel.send(msg)
     
 @bot.command()
-async def ping(ctx):
-    await ctx.send('テスト')
+async def help(ctx):
+    await ctx.send('【/team チーム数】')
 
 """botの接続と起動"""
 bot.run(token)

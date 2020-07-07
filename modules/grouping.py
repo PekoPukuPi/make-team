@@ -47,12 +47,12 @@ class MakeTeam:
         # チーム分け
         for i in range(party_num): 
             if i == 0:
-            team.append("=====チーム"+str(i+1)+"=====")
-            team.extend(remainder)
-            team.extend(self.channel_mem[i:self.mem_len:party_num])  
+                team.append("=====チーム"+str(i+1)+"=====")
+                team.extend(remainder)
+                team.extend(self.channel_mem[i:self.mem_len:party_num])  
             else:
-            team.append("=====チーム"+str(i+1)+"=====")
-            team.extend(self.channel_mem[i:self.mem_len:party_num])
+                team.append("=====チーム"+str(i+1)+"=====")
+                team.extend(self.channel_mem[i:self.mem_len:party_num])
 
         return ('\n'.join(team))
 

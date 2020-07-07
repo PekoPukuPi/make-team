@@ -50,7 +50,7 @@ class MakeTeam:
             team.append("=====チーム"+str(i+1)+"=====")
             team.extend(remainder)
             team.extend(self.channel_mem[i:self.mem_len:party_num])  
-    else:
+            else:
             team.append("=====チーム"+str(i+1)+"=====")
             team.extend(self.channel_mem[i:self.mem_len:party_num])
 

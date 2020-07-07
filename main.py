@@ -24,7 +24,7 @@ async def on_ready():
 async def team(ctx, specified_num=2):
     make_team = MakeTeam()
     remainder_flag = 'true'
-    msg = make_team.make_party_num(ctx,specified_num,remainder_flag)
+    msg = make_team.make_party_num1(ctx,specified_num,remainder_flag)
     await ctx.channel.send(msg)
 
 # メンバー数が均等にはならないチーム分け

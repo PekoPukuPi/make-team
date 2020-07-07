@@ -52,7 +52,7 @@ class MakeTeam:
         return ('\n'.join(team))
     
     # チーム数を指定した場合のチーム分け
-    def make_party_num(self, ctx, party_num, remainder_flag='false'):
+    def make_party_num2(self, ctx, party_num, remainder_flag='false'):
         team = []
         remainder = []
         

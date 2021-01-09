@@ -1,3 +1,4 @@
+
 import random
 
 import discord
@@ -45,14 +46,23 @@ class MakeTeam:
                # team.extend(remainder)
 
         # チーム分け
-        for i in range(party_num): 
-            if i == 0:
+        usagi = 0
+        if remainder_num >= 2:
+            for i in range(party_num): 
                 team.append("=====チーム"+str(i+1)+"=====")
-                team.extend(remainder)
                 team.extend(self.channel_mem[i:self.mem_len:party_num])  
-            else:
-                team.append("=====チーム"+str(i+1)+"=====")
-                team.extend(self.channel_mem[i:self.mem_len:party_num])
+                if remainder_num >= usagi:
+                    team.extend(remainder[usagi])
+                    usagi = usagi + 1
+        else:
+            for i in range(party_num): 
+                if i == 0:
+                    team.append("=====チーム"+str(i+1)+"=====")
+                    team.extend(remainder)
+                    team.extend(self.channel_mem[i:self.mem_len:party_num])
+                else:
+                    team.append("=====チーム"+str(i+1)+"=====")
+                    team.extend(self.channel_mem[i:self.mem_len:party_num])
 
         return ('\n'.join(team))
 
@@ -88,5 +98,3 @@ class MakeTeam:
             team.extend(self.channel_mem[i:self.mem_len:party_num])
 
         return ('\n'.join(team))
-ゴミ箱(1)空ける
- 

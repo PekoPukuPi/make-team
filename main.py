@@ -1,49 +1,92 @@
-import os
-import traceback
+import random
 
 import discord
 from discord.ext import commands
+from cerberus import Validator
 
-from modules.grouping import MakeTeam
+class MakeTeam:
 
-token = os.environ['DISCORD_BOT_TOKEN']
-bot = commands.Bot(command_prefix='/')
+    def __init__(self):
+        self.channel_mem = []
+        self.mem_len = 0
+        self.vc_state_err = '実行できません。ボイスチャンネルに入ってコマンドを実行してください。'
 
-"""起動処理"""
-@bot.event
-async def on_ready():
-    print('-----Logged in info-----')
-    print(bot.user.name)
-    print(bot.user.id)
-    print(discord.__version__)
-    print('------------------------')
+    def set_mem(self, ctx):
+        state = ctx.author.voice # コマンド実行者のVCステータスを取得
+        if state is None: 
+            return False
 
-"""コマンド実行"""
-# メンバー数が均等になるチーム分け
-@bot.command()
-async def team(ctx, specified_num=2):
-    make_team = MakeTeam()
-    remainder_flag = 'true'
-    msg = make_team.make_party_num(ctx,specified_num,remainder_flag)
-    await ctx.channel.send(msg)
-
-# メンバー数が均等にはならないチーム分け
-@bot.command()
-async def team_norem(ctx, specified_num=2):
-    make_team = MakeTeam()
-    msg = make_team.make_party_num(ctx,specified_num)
-    await ctx.channel.send(msg)
-
-# メンバー数を指定してチーム分け
-@bot.command()
-async def group(ctx, specified_num=1):
-    make_team = MakeTeam()
-    msg = make_team.make_specified_len(ctx,specified_num)
-    await ctx.channel.send(msg)
+        self.channel_mem = [i.name for i in state.channel.members] # VCメンバリスト取得
+        self.mem_len = len(self.channel_mem) # 人数取得
+        return True
     
-@bot.command()
-async def usagi(ctx):
-    await ctx.send('```【/team チーム数】\n *例：/team 3 → 3チーム作成\n・指定した数のチームを作成\n・メンバー数が割り切れない場合はチーム1が1人多くなります\n・チーム数を指定しなくても実行可。デフォルトで"2"を指定``````【/group メンバー数】\n *例：/group 3 → 1チーム3人になるようにチーム作成\n・指定したメンバー数でチームを作成\n・メンバー数を指定しない場合、デフォルトで"1"を指定```')
+    # チーム数を指定した場合のチーム分け
+    def make_party_num(self, ctx, party_num, remainder_flag='false'):
+        team = []
+        remainder = []
+        
+        if self.set_mem(ctx) is False:
+            return self.vc_state_err
 
-"""botの接続と起動"""
-bot.run(token)
+        # 指定数の確認
+        if party_num > self.mem_len or party_num <= 0:
+            return '実行できません。チーム分けできる数を指定してください。(チーム数を指定しない場合は、デフォルトで2が指定されます)'
+
+        # メンバーリストをシャッフル
+        random.shuffle(self.channel_mem)
+
+        # チーム分けで余るメンバーを取得
+        if remainder_flag:
+            remainder_num = self.mem_len % party_num
+            if remainder_num != 0: 
+                for r in range(remainder_num):
+                    remainder.append(self.channel_mem.pop())
+               # team.append("=====余り=====")
+               # team.extend(remainder)
+
+        # チーム分け
+        for i in range(party_num): 
+            if i == 0:
+                team.append("=====チーム"+str(i+1)+"=====")
+                team.extend(remainder)
+                team.extend(self.channel_mem[i:self.mem_len:party_num])  
+            else:
+                team.append("=====チーム"+str(i+1)+"=====")
+                team.extend(self.channel_mem[i:self.mem_len:party_num])
+
+        return ('\n'.join(team))
+
+    # チームのメンバー数を指定した場合のチーム分け
+    def make_specified_len(self, ctx, specified_len):
+        team = []
+        remainder = []
+
+        if self.set_mem(ctx) is False:
+            return self.vc_state_err
+
+        # 指定数の確認
+        if specified_len > self.mem_len or specified_len <= 0:
+            return '実行できません。チーム分けできる数を指定してください。'
+
+        # チーム数を取得
+        party_num = self.mem_len // specified_len
+
+        # メンバーリストをシャッフル
+        random.shuffle(self.channel_mem)
+
+        # チーム分けで余るメンバーを取得
+        remainder_num = self.mem_len % party_num
+        if remainder_num != 0: 
+            for r in range(remainder_num):
+                remainder.append(self.channel_mem.pop())
+            team.append("=====余り=====")
+            team.extend(remainder)
+
+        # チーム分け
+        for i in range(party_num): 
+            team.append("=====チーム"+str(i+1)+"=====")
+            team.extend(self.channel_mem[i:self.mem_len:party_num])
+
+        return ('\n'.join(team))
+ゴミ箱(1)空ける
+ 
